@@ -71,14 +71,14 @@ class TodoApp extends React.Component {
     render() {
       return (
         <div className="text-light">
-          {this.props.taches !== "" ?
+          {this.state.taches !== "" ?
             this.props.taches.map(tache => (
             <div key={tache.id}className='border mb-3 p-2 d-flex justify-content-between'>
             <span>{tache.text}</span>
             <button onClick={this.removeTask} className='btn btn-danger '>Supprimer</button>
             </div>
           )):
-          <p>Veuiller remplir le champ</p>
+          console.log("erreur")
           }
         </div>
       );
