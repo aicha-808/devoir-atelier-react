@@ -6,6 +6,7 @@ class TodoApp extends React.Component {
         this.state = { taches: [], text: '' };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.removeTask = this.removeTask.bind(this);
     }
 
     componentDidMount = () => {
@@ -29,10 +30,10 @@ class TodoApp extends React.Component {
         id: Date.now()
         };
         this.setState(state => ({
-        taches: state.taches.concat(newTask),
-        text: ''
+            taches: state.taches.concat(newTask),
+            text: ''
         }));
-
+        
       localStorage.setItem("task", JSON.stringify(this.state.taches.concat(newTask)))
     }
 
@@ -45,12 +46,7 @@ class TodoApp extends React.Component {
         return (
             <div className="container p-5">
                 <div className="row w-75 mx-auto">
-                    <div className="col-lg-12 mb-3">
-                        <div className="bg-secondary p-3">
-                        <h2 className="text-light">Liste des tâches à faire :</h2>
-                        <TodoList taches={this.state.taches} />
-                        </div>
-                    </div>
+                    
                     <div className="col-lg-12 mb-3">
                         <form onSubmit={this.handleSubmit} className="bg-warning p-3">
                             <div className="d-flex flex-column">
@@ -59,6 +55,12 @@ class TodoApp extends React.Component {
                             </div>
                             <button className="btn btn-secondary mt-3">Ajouter</button>
                         </form>
+                    </div>
+                    <div className="col-lg-12 mb-3">
+                        <div className="bg-secondary p-3">
+                        <h2 className="text-light">Liste des tâches à faire :</h2>
+                        <TodoList taches={this.state.taches} removeTask={this.removeTask}/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,19 +71,23 @@ class TodoApp extends React.Component {
 // TodoList est un composant controlé
  class TodoList extends React.Component {
     render() {
+        //  const { taches } = this.props;
       return (
-        <div className="text-light">
-          {this.state.taches !== "" ?
-            this.props.taches.map(tache => (
-            <div key={tache.id}className='border mb-3 p-2 d-flex justify-content-between'>
-            <span>{tache.text}</span>
-            <button onClick={this.removeTask} className='btn btn-danger '>Supprimer</button>
-            </div>
-          )):
-          console.log("erreur")
-          }
+        <div>
+            {this.props.taches && (
+               <div className="text-light">
+                    {this.props.taches.map(tache => {
+                        return (<div key={tache.id}className='border mb-3 p-2 d-flex justify-content-between'>
+                        <span>{tache.text}</span>
+                        <button  onClick={() => this.props.removeTask(tache.id)} className='btn btn-danger '>Supprimer</button>
+                        </div>
+                        )})
+                    }
+                </div>
+            )}
         </div>
-      );
+        
+      )
     }
   }
 export default TodoApp;
