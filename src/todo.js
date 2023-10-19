@@ -11,7 +11,7 @@ class TodoApp extends React.Component {
 
     componentDidMount = () => {
         const tasks = JSON.parse(localStorage.getItem('task'));
-        if (tasks !== "") {
+        if (tasks !== null) {
             this.setState({taches: tasks})
         }
     }
@@ -30,9 +30,10 @@ class TodoApp extends React.Component {
         id: Date.now()
         };
         this.setState(state => ({
-            taches: state.taches.concat(newTask),
+            taches: state.taches ? state.taches.concat(newTask) : [newTask],
             text: ''
         }));
+        
         
       localStorage.setItem("task", JSON.stringify(this.state.taches.concat(newTask)))
     }
@@ -40,7 +41,11 @@ class TodoApp extends React.Component {
     removeTask = (uId) => {
         const updatedTasks = this.state.taches.filter((task) => task.id !== uId);
         this.setState({ taches: updatedTasks });
-      };
+    
+        // Mettez à jour le localStorage ici
+        localStorage.setItem("task", JSON.stringify(updatedTasks));
+    };
+    
 
     render() {
         return (
